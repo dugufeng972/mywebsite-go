@@ -20,12 +20,12 @@ func InitDB() {
 	}
 	g := gen.NewGenerator(gen.Config{
 		// 生成文件的输出路径
-		OutPath: "./dal/query",
+		OutPath: "./domain/query",
 		// 生成的 Model 文件路径 (如果不指定，会和查询代码在同一级)
-		ModelPkgPath: "../domain/po",
+		ModelPkgPath: "./po",
 
 		// 生成模式: 这里选择不要生成查询函数
-		Mode: gen.WithoutContext,
+		Mode: gen.WithoutContext | gen.WithQueryInterface,
 
 		// 以下配置控制生成 Model 的字段属性 (可选)
 		FieldNullable:     true,  // 数据库字段可空时，生成指针类型
@@ -56,4 +56,5 @@ func InitDB() {
 
 	// 执行生成
 	g.Execute()
+	slog.Info("初始化完成")
 }
