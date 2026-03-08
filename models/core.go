@@ -56,5 +56,5 @@ func InitDB() {
 
 	// 执行生成
 	g.Execute()
-	slog.Info("初始化完成")
+	slog.Info("数据库初始化完成")
 }

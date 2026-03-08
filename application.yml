@@ -1,0 +1,9 @@
+jwtconfig:
+  secretkey: sss
+  issur: ddw
+  expireduration: 200h
+
+auth:
+  path:
+    - "/user/login"
+    - "/user/register"
