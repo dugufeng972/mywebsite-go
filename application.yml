@@ -1,9 +1,12 @@
+# jwt配置
 jwtconfig:
   secretkey: sss
   issur: ddw
   expireduration: 200h
 
+# 不需要token的请求路径
 auth:
   path:
     - "/user/login"
     - "/user/register"
+    - "/user/authcode"

@@ -17,23 +17,29 @@ import (
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:     db,
-		Swuser: newSwuser(db, opts...),
+		db:          db,
+		Book:        newBook(db, opts...),
+		BookChapter: newBookChapter(db, opts...),
+		Swuser:      newSwuser(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	Swuser swuser
+	Book        book
+	BookChapter bookChapter
+	Swuser      swuser
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:     db,
-		Swuser: q.Swuser.clone(db),
+		db:          db,
+		Book:        q.Book.clone(db),
+		BookChapter: q.BookChapter.clone(db),
+		Swuser:      q.Swuser.clone(db),
 	}
 }
 
@@ -47,18 +53,24 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:     db,
-		Swuser: q.Swuser.replaceDB(db),
+		db:          db,
+		Book:        q.Book.replaceDB(db),
+		BookChapter: q.BookChapter.replaceDB(db),
+		Swuser:      q.Swuser.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	Swuser ISwuserDo
+	Book        IBookDo
+	BookChapter IBookChapterDo
+	Swuser      ISwuserDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		Swuser: q.Swuser.WithContext(ctx),
+		Book:        q.Book.WithContext(ctx),
+		BookChapter: q.BookChapter.WithContext(ctx),
+		Swuser:      q.Swuser.WithContext(ctx),
 	}
 }
 

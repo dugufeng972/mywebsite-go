@@ -3,12 +3,16 @@ package models
 import (
 	"log/slog"
 
+	"github.com/bwmarrin/snowflake"
 	"gorm.io/driver/mysql"
 	"gorm.io/gen"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
+
+// 雪花算法生成id
+var Node *snowflake.Node
 
 func InitDB() {
 	var err error
@@ -18,13 +22,19 @@ func InitDB() {
 		slog.Error("数据库连接失败")
 		return
 	}
+	Node, err = snowflake.NewNode(1)
+	if err != nil {
+		slog.Error("雪花算法初始化失败")
+		return
+	}
+
 	g := gen.NewGenerator(gen.Config{
 		// 生成文件的输出路径
 		OutPath: "./domain/query",
-		// 生成的 Model 文件路径 (如果不指定，会和查询代码在同一级)
-		ModelPkgPath: "./po",
+		// 生成的 Model 包名，这个包放在query所在父级目录下
+		ModelPkgPath: "po",
 
-		// 生成模式: 这里选择不要生成查询函数
+		// 生成模式: 这里选择要不要生成查询函数
 		Mode: gen.WithoutContext | gen.WithQueryInterface,
 
 		// 以下配置控制生成 Model 的字段属性 (可选)
@@ -39,11 +49,11 @@ func InitDB() {
 
 	// 4. 指定要生成代码的表
 	// 方式A: 生成所有表
-	//g.ApplyBasic(g.GenerateAllTable()...)
+	g.ApplyBasic(g.GenerateAllTable()...)
 
 	// 方式B: 生成指定的表，并可以自定义模型 (推荐)
 	// 后面写哪个表
-	userModel := g.GenerateModel("swuser")
+	// userModel := g.GenerateModel("swuser")
 
 	// 方式C: 生成表时进行更精细的控制
 	// g.GenerateModel("products",
@@ -52,7 +62,7 @@ func InitDB() {
 	// )
 
 	// 将生成的结构体写入文件
-	g.ApplyBasic(userModel)
+	// g.ApplyBasic(userModel, g.GenerateModel("book"))
 
 	// 执行生成
 	g.Execute()

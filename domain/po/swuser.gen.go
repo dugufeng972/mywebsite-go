@@ -21,6 +21,7 @@ type Swuser struct {
 	UpdateTime time.Time `gorm:"column:update_time;type:datetime;not null;comment:用户信息更新时间" json:"update_time"` // 用户信息更新时间
 	Creater    *int32    `gorm:"column:creater;type:tinyint;comment:创建者id" json:"creater"`                      // 创建者id
 	Updater    *int32    `gorm:"column:updater;type:tinyint;comment:更新者id" json:"updater"`                      // 更新者id
+	AvatarURL  *string   `gorm:"column:avatar_url;type:varchar(500);comment:用户头像" json:"avatar_url"`            // 用户头像
 }
 
 // TableName Swuser's table name

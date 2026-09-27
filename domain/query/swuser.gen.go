@@ -37,6 +37,7 @@ func newSwuser(db *gorm.DB, opts ...gen.DOOption) swuser {
 	_swuser.UpdateTime = field.NewTime(tableName, "update_time")
 	_swuser.Creater = field.NewInt32(tableName, "creater")
 	_swuser.Updater = field.NewInt32(tableName, "updater")
+	_swuser.AvatarURL = field.NewString(tableName, "avatar_url")
 
 	_swuser.fillFieldMap()
 
@@ -57,6 +58,7 @@ type swuser struct {
 	UpdateTime field.Time   // 用户信息更新时间
 	Creater    field.Int32  // 创建者id
 	Updater    field.Int32  // 更新者id
+	AvatarURL  field.String // 用户头像
 
 	fieldMap map[string]field.Expr
 }
@@ -82,6 +84,7 @@ func (s *swuser) updateTableName(table string) *swuser {
 	s.UpdateTime = field.NewTime(table, "update_time")
 	s.Creater = field.NewInt32(table, "creater")
 	s.Updater = field.NewInt32(table, "updater")
+	s.AvatarURL = field.NewString(table, "avatar_url")
 
 	s.fillFieldMap()
 
@@ -98,7 +101,7 @@ func (s *swuser) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (s *swuser) fillFieldMap() {
-	s.fieldMap = make(map[string]field.Expr, 9)
+	s.fieldMap = make(map[string]field.Expr, 10)
 	s.fieldMap["id"] = s.ID
 	s.fieldMap["username"] = s.Username
 	s.fieldMap["password"] = s.Password
@@ -108,6 +111,7 @@ func (s *swuser) fillFieldMap() {
 	s.fieldMap["update_time"] = s.UpdateTime
 	s.fieldMap["creater"] = s.Creater
 	s.fieldMap["updater"] = s.Updater
+	s.fieldMap["avatar_url"] = s.AvatarURL
 }
 
 func (s swuser) clone(db *gorm.DB) swuser {
